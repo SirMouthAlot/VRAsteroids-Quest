@@ -543,7 +543,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ip: 192.168.137.184
   watchedObjects:
-  - {fileID: 0}
+  - {fileID: 1485108030454689008}
 --- !u!4 &1243267492
 Transform:
   m_ObjectHideFlags: 0
@@ -952,7 +952,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 956d9c624d0740c4f93923fa5f6e438c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 1485108030454689005}
 --- !u!33 &1485108030466284059
 MeshFilter:
   m_ObjectHideFlags: 0
