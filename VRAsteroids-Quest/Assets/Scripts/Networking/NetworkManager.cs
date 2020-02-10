@@ -5,6 +5,9 @@ using System.Runtime.InteropServices;
 
 public class NetworkManager : MonoBehaviour
 {
+    private float m_time = 0.0f;
+    public float sendInterval = 30.0f;
+
     public string ip;
 
     public List<WatchedObject> watchedObjects = new List<WatchedObject>();
@@ -55,12 +58,19 @@ public class NetworkManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
+        SendData();
+    }
+
+    void SendData()
+    {
+        m_time += Time.deltaTime;
+        if (m_time >= sendInterval)
         {
             for (int i = 0; i < watchedObjects.Count; i++)
             {
                 watchedObjects[i].SendPosition();
             }
+            m_time = 0.0f;
         }
     }
 }
