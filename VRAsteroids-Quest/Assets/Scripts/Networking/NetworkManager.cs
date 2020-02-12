@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
+using Utils;
 
 public class NetworkManager : MonoBehaviour
 {
@@ -15,44 +16,62 @@ public class NetworkManager : MonoBehaviour
     const string DLL_NAME = "NETWORKING";
 
     [DllImport(DLL_NAME)]
-    public static extern bool StartupWinsock();
+    public static extern void InitClient();
 
     [DllImport(DLL_NAME)]
-    public static extern void SetupHints();
+    public static extern void ConnectToServer(string ip);
 
     [DllImport(DLL_NAME)]
-    public static extern void ConnectTo(string ip);
+    public static extern void SendFloat(float flt, MessageFlags flag);
 
     [DllImport(DLL_NAME)]
-    public static extern void CreateSocket();
+    public static extern void SendInt(float it, MessageFlags flag);
 
     [DllImport(DLL_NAME)]
-    public static extern bool SendFloat(float flt);
+    public static extern void SendString(string str, MessageFlags flag);
 
     [DllImport(DLL_NAME)]
-    public static extern bool SendInt(float it);
+    public static extern void SendVector(Vector3CS vec, MessageFlags flag);
 
     [DllImport(DLL_NAME)]
-    public static extern bool SendString(string str);
+    public static extern float RecvFloat();
 
     [DllImport(DLL_NAME)]
-    public static extern bool ShutdownWinsock();
+    public static extern int RecvInt();
+
+    [DllImport(DLL_NAME)]
+    public static extern string RecvString();
+
+    [DllImport(DLL_NAME)]
+    public static extern Vector3CS RecvVector();
+
+    [DllImport(DLL_NAME)]
+    public static extern void DisconnectFromServer();
+
+    [DllImport(DLL_NAME)]
+    public static extern void CloseClient();
 
 
 
     private void OnDestroy()
     {
         //Cleanup
-        ShutdownWinsock();
+        DisconnectFromServer();
+        CloseClient();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        StartupWinsock();
-        SetupHints();
-        ConnectTo(ip);
-        CreateSocket();
+        InitializeClient();
+
+       //StartCoroutine(ReceiveData());
+    }
+
+    void InitializeClient()
+    {
+        InitClient();
+        ConnectToServer(ip);
     }
 
     // Update is called once per frame
@@ -60,6 +79,23 @@ public class NetworkManager : MonoBehaviour
     {
         SendData();
     }
+
+    // IEnumerator ReceiveData()
+    // {
+    //     while (true)
+    //     {
+    //         int id = RecvInt();
+    //         for (int i = 0; i < watchedObjects.Count; i++)
+    //         {
+    //             if (watchedObjects[i].objectID == id)
+    //             {
+    //                 watchedObjects[i].ReceivePosition();
+    //             }
+    //         }
+    //     }
+    //     //Supposed to be unreachable
+    //     yield return null;
+    // }
 
     void SendData()
     {
